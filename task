@@ -1,0 +1,59 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class LambdaTestSeleniumAutomation {
+    public static void main(String[] args) {
+        // Set the path for the ChromeDriver (make sure you have ChromeDriver installed)
+        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+
+        // Initialize the WebDriver (Chrome in this case)
+        WebDriver driver = new ChromeDriver();
+
+        try {
+            // Step 1: Open LambdaTest's Selenium Playground
+            driver.get("https://www.lambdatest.com/selenium-playground");
+
+            // Step 2: Click "Simple Form Demo"
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            WebElement simpleFormDemo = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Simple Form Demo")));
+            simpleFormDemo.click();
+
+            // Step 3: Validate that the URL contains "simple-form-demo"
+            if (driver.getCurrentUrl().contains("simple-form-demo")) {
+                System.out.println("URL validation passed. The URL contains 'simple-form-demo'.");
+            } else {
+                System.out.println("URL validation failed.");
+            }
+
+            // Step 4: Create a variable for a string value
+            String message = "Welcome to LambdaTest";
+
+            // Step 5: Enter the string value into the "Enter Message" text box
+            WebElement messageTextBox = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("user-message")));
+            messageTextBox.sendKeys(message);
+
+            // Step 6: Click the "Get Checked Value" button
+            WebElement getCheckedValueButton = driver.findElement(By.id("showInput"));
+            getCheckedValueButton.click();
+
+            // Step 7: Validate if the same text message is displayed in the right-hand panel under "Your Message:"
+            WebElement yourMessageText = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("message")));
+            String displayedMessage = yourMessageText.getText();
+
+            if (message.equals(displayedMessage)) {
+                System.out.println("Message validation passed. The displayed message matches the entered message.");
+            } else {
+                System.out.println("Message validation failed. The displayed message does not match the entered message.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Close the browser
+            driver.quit();
+        }
+    }
+}
